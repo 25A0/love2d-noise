@@ -127,8 +127,12 @@ function love.load()
 end
 
 function love.draw()
+  local w, h = love.window.getMode()
+  local min = math.min(w, h)
+  local x = (w - min) / 2
+  local y = (h - min) / 2
   love.graphics.setShader(shader)
-  love.graphics.draw(dummy_texture, 200, 100, 0, 400, 400)
+  love.graphics.draw(dummy_texture, x, y, 0, min, min)
   love.graphics.setShader()
   love.graphics.setColor(255, 255, 255, 255)
   love.graphics.print(string.format("FPS: %d", fps), 10, 10)
