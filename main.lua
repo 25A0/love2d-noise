@@ -79,6 +79,7 @@ local function build_shader(path_to_shader)
   end
   local perm_image = love.graphics.newImage(perm_image_data)
   perm_image:setFilter("nearest", "nearest")
+  perm_image:setWrap("repeat", "repeat")
   -- send texture to the shader
   shader:send("permTexture", perm_image)
 
