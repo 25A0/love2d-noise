@@ -27,7 +27,7 @@
  * This error is not even noticeable to the eye even if you isolate the exact
  * position in the domain where it occurs and know exactly what to look for.
  * The noise pattern is still visually correct, so I left the bug in there.
- * 
+ *
  * The value of classic 4D noise goes above 1.0 and below -1.0 at some
  * points. Not much and only very sparsely, but it happens.
  */
@@ -305,7 +305,7 @@ float snoise(vec2 P) {
     t1 *= t1;
     n1 = t1 * t1 * dot(grad1, Pf1);
   }
-  
+
   // Noise contribution from last corner
   vec2 Pf2 = Pf0 - vec2(1.0-2.0*G2);
   vec2 grad2 = texture2D(permTexture, Pi + vec2(ONE, ONE)).rg * 4.0 - 1.0;
@@ -377,7 +377,7 @@ float snoise(vec3 P) {
     t1 *= t1;
     n1 = t1 * t1 * dot(grad1, Pf1);
   }
-  
+
   // Noise contribution from third corner
   vec3 Pf2 = Pf0 - o2 + 2.0 * G3;
   float perm2 = texture2D(permTexture, Pi.xy + o2.xy*ONE).a;
@@ -389,7 +389,7 @@ float snoise(vec3 P) {
     t2 *= t2;
     n2 = t2 * t2 * dot(grad2, Pf2);
   }
-  
+
   // Noise contribution from last corner
   vec3 Pf3 = Pf0 - vec3(1.0-3.0*G3);
   float perm3 = texture2D(permTexture, Pi.xy + vec2(ONE, ONE)).a;
@@ -472,7 +472,7 @@ float snoise(vec4 P) {
     t1 *= t1;
     n1 = t1 * t1 * dot(grad1, Pf1);
   }
-  
+
   // Noise contribution from third corner
   vec4 Pf2 = Pf0 - o2 + 2.0 * G4;
   o2 = o2 * ONE;
@@ -486,7 +486,7 @@ float snoise(vec4 P) {
     t2 *= t2;
     n2 = t2 * t2 * dot(grad2, Pf2);
   }
-  
+
   // Noise contribution from fourth corner
   vec4 Pf3 = Pf0 - o3 + 3.0 * G4;
   o3 = o3 * ONE;
@@ -500,7 +500,7 @@ float snoise(vec4 P) {
     t3 *= t3;
     n3 = t3 * t3 * dot(grad3, Pf3);
   }
-  
+
   // Noise contribution from last corner
   vec4 Pf4 = Pf0 - vec4(1.0-4.0*G4);
   float perm4xy = texture2D(permTexture, Pi.xy + vec2(ONE, ONE)).a;
