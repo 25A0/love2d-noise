@@ -49,7 +49,7 @@
  * 4D simplex noise uses all three textures.
  */
 uniform sampler2D permTexture;
-uniform sampler1D simplexTexture;
+uniform sampler2D simplexTexture;
 uniform sampler2D gradTexture;
 uniform float time; // Used for texture animation
 
@@ -344,7 +344,7 @@ float snoise(vec3 P) {
   float c2 = (Pf0.x > Pf0.z) ? 0.25 : 0.0;
   float c3 = (Pf0.y > Pf0.z) ? 0.125 : 0.0;
   float sindex = c1 + c2 + c3;
-  vec3 offsets = texture1D(simplexTexture, sindex).rgb;
+  vec3 offsets = texture2D(simplexTexture, vec2(sindex, 0.0)).rgb;
   vec3 o1 = step(0.375, offsets);
   vec3 o2 = step(0.125, offsets);
 
@@ -435,7 +435,7 @@ float snoise(vec4 P) {
   float c5 = (Pf0.y > Pf0.w) ? 0.03125 : 0.0;
   float c6 = (Pf0.z > Pf0.w) ? 0.015625 : 0.0;
   float sindex = c1 + c2 + c3 + c4 + c5 + c6;
-  vec4 offsets = texture1D(simplexTexture, sindex).rgba;
+  vec4 offsets = texture2D(simplexTexture, vec2(sindex, 0.0)).rgba;
   vec4 o1 = step(0.625, offsets);
   vec4 o2 = step(0.375, offsets);
   vec4 o3 = step(0.125, offsets);
