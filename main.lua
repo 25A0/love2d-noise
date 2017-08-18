@@ -116,6 +116,9 @@ local function build_shader(path_to_shader)
 end
 
 local time = 0
+local fps = 0
+local second_acc = 0
+local frames_this_second = 0
 
 function love.load()
   dummy_texture = love.graphics.newCanvas(1, 1)
@@ -125,9 +128,20 @@ end
 function love.draw()
   love.graphics.setShader(shader)
   love.graphics.draw(dummy_texture, 200, 100, 0, 400, 400)
+  love.graphics.setShader()
+  love.graphics.setColor(255, 255, 255, 255)
+  love.graphics.print(string.format("FPS: %d", fps), 10, 10)
 end
 
 function love.update(dt)
+  frames_this_second = frames_this_second + 1
+  second_acc = second_acc + dt
+  if second_acc > 1 then
+    second_acc = second_acc - 1
+    fps = frames_this_second
+    frames_this_second = 0
+  end
+
   time = time + dt
   shader:send("time", time)
 end
