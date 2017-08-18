@@ -54,13 +54,6 @@ uniform sampler2D gradTexture;
 uniform float time; // Used for texture animation
 
 /*
- * Both 2D and 3D texture coordinates are defined, for testing purposes.
- */
-varying vec2 v_texCoord2D;
-varying vec3 v_texCoord3D;
-varying vec4 v_color;
-
-/*
  * To create offsets of one texel and one half texel in the
  * texture lookup, we need to know the texture image size.
  */
@@ -519,7 +512,7 @@ float snoise(vec4 P) {
 }
 
 
-void main( void )
+vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords )
 {
 
   /* These lines test, in order, 2D classic noise, 2D simplex noise,
@@ -530,14 +523,14 @@ void main( void )
    * so OpenGL will fail to bind them. It's safe to ignore these
    * warnings from the C program. The program is designed to work anyway.
    */
-  //float n = noise(v_texCoord2D * 32.0 + 240.0);
-  //float n = snoise(v_texCoord2D * 16.0);
-  //float n = noise(vec3(4.0 * v_texCoord3D.xyz * (2.0 + sin(0.5 * time))));
-  //float n = snoise(vec3(2.0 * v_texCoord3D.xyz * (2.0 + sin(0.5 * time))));
-  //float n = noise(vec4(8.0 * v_texCoord3D.xyz, 0.5 * time));
-  float n = snoise(vec4(4.0 * v_texCoord3D.xyz, 0.5 * time));
+  // float n = noise(texture_coords * 32.0 + 240.0);
+  // float n = snoise(texture_coords * 16.0);
+  // float n = noise(vec3(4.0 * texture_coords * (2.0 + sin(0.5 * time)), 0.0));
+  // float n = snoise(vec3(2.0 * texture_coords * (2.0 + sin(0.5 * time)), 0.0));
+  // float n = noise(vec4(8.0 * texture_coords, 0.0, 0.5 * time));
+  float n = snoise(vec4(4.0 * texture_coords.xy, 0.0, 0.5 * time));
 
-  gl_FragColor = v_color * vec4(0.5 + 0.5 * vec3(n, n, n), 1.0);
+  return color * vec4(0.5 + 0.5 * vec3(n, n, n), 1.0);
 
 }
 
