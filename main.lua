@@ -25,6 +25,7 @@ local modes = {
 }
 
 function love.load()
+  love.window.setMode(800, 600, {vsync = false, resizable = true})
   dummy_texture = love.graphics.newCanvas(1, 1)
   shader = noise.build_shader("noise.frag", seed)
 end
