@@ -121,6 +121,16 @@ local fps = 0
 local second_acc = 0
 local frames_this_second = 0
 
+local current_mode -- noise mode
+local modes = {
+  [1] = "2D classic noise",
+  [2] = "2D simplex noise",
+  [3] = "3D classic noise",
+  [4] = "3D simplex noise",
+  [5] = "4D classic noise",
+  [6] = "4D simplex noise"
+}
+
 function love.load()
   dummy_texture = love.graphics.newCanvas(1, 1)
   shader = build_shader("GLSLnoisetest4.frag")
@@ -135,7 +145,9 @@ function love.draw()
   love.graphics.draw(dummy_texture, x, y, 0, min, min)
   love.graphics.setShader()
   love.graphics.setColor(255, 255, 255, 255)
-  love.graphics.print(string.format("FPS: %d", fps), 10, 10)
+  local info_string = string.format("FPS: %d\t%s", fps,
+                                    modes[current_mode] or "Press 1-6 to switch modes")
+  love.graphics.print(info_string, 10, 10)
 end
 
 function love.update(dt)
@@ -153,7 +165,8 @@ end
 
 function love.keypressed(key)
   local mode = tonumber(key)
-  if mode then
+  if mode and modes[mode] then
+    current_mode = mode
     shader:send("mode", mode)
   end
 end
