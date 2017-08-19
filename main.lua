@@ -42,8 +42,8 @@ function love.draw()
   local info_string = string.format("FPS: %d\t%s", fps,
                                     modes[current_mode] or "Press 1-6 to switch modes")
   love.graphics.print(info_string, 10, 2)
-  local position_string = string.format("x: %f\ty: %f\tz: %f\tfreq: %f\tseed: %s",
-                                        x, y, z, freq, seed)
+  local position_string = string.format("x: %f\ty: %f\tz: %f\tfreq: %f\tseed: %s\tsamples/frame: %d",
+                                        x, y, z, freq, seed, min*min)
   love.graphics.print(position_string, 10, h - 18)
 end
 
