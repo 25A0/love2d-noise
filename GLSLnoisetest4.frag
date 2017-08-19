@@ -537,9 +537,9 @@ vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords 
   else if(mode == 2)
     n = snoise(texture_coords * 16.0);
   else if(mode == 3)
-    n = noise(vec3(4.0 * texture_coords * (2.0 + sin(0.5 * time)), z));
+    n = noise(vec3(4.0 * texture_coords * 2.0, z));
   else if(mode == 4)
-    n = snoise(vec3(2.0 * texture_coords * (2.0 + sin(0.5 * time)), z));
+    n = snoise(vec3(2.0 * texture_coords * 2.0, z));
   else if(mode == 5)
     n = noise(vec4(8.0 * texture_coords, z, 0.5 * time));
   else if(mode == 6)
