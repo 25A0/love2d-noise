@@ -121,6 +121,9 @@ local fps = 0
 local second_acc = 0
 local frames_this_second = 0
 
+-- offsets
+local x, y, z = 0.0, 0.0, 0.0
+
 local current_mode -- noise mode
 local modes = {
   [1] = "2D classic noise",
@@ -139,15 +142,17 @@ end
 function love.draw()
   local w, h = love.window.getMode()
   local min = math.min(w, h)
-  local x = (w - min) / 2
-  local y = (h - min) / 2
+  local pos_x = (w - min) / 2
+  local pos_y = (h - min) / 2
   love.graphics.setShader(shader)
-  love.graphics.draw(dummy_texture, x, y, 0, min, min)
+  love.graphics.draw(dummy_texture, pos_x, pos_y, 0, min, min)
   love.graphics.setShader()
   love.graphics.setColor(255, 255, 255, 255)
   local info_string = string.format("FPS: %d\t%s", fps,
                                     modes[current_mode] or "Press 1-6 to switch modes")
   love.graphics.print(info_string, 10, 10)
+  local position_string = string.format("x: %f\ty: %f\tz: %f", x, y, z)
+  love.graphics.print(position_string, 10, h - 20)
 end
 
 function love.update(dt)
@@ -161,6 +166,19 @@ function love.update(dt)
 
   time = time + dt
   shader:send("time", time)
+
+  local speed = 1
+  if love.keyboard.isDown("a") then x = x - dt * speed end
+  if love.keyboard.isDown("d") then x = x + dt * speed end
+  shader:send("x", x)
+
+  if love.keyboard.isDown("w") then y = y - dt * speed end
+  if love.keyboard.isDown("s") then y = y + dt * speed end
+  shader:send("y", y)
+
+  if love.keyboard.isDown("r") then z = z + dt * speed end
+  if love.keyboard.isDown("f") then z = z - dt * speed end
+  shader:send("z", z)
 end
 
 function love.keypressed(key)

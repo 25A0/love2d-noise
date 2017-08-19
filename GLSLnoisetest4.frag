@@ -54,6 +54,9 @@ uniform sampler2D gradTexture;
 uniform float time; // Used for texture animation
 uniform int mode; // Determines which of the noise functions is used
 
+// offsets
+uniform float x, y, z;
+
 /*
  * To create offsets of one texel and one half texel in the
  * texture lookup, we need to know the texture image size.
@@ -524,19 +527,23 @@ vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords 
    * so OpenGL will fail to bind them. It's safe to ignore these
    * warnings from the C program. The program is designed to work anyway.
    */
+
+  // Offset the texture coordinate by current offset
+  texture_coords += vec2(x, y);
+
   float n;
   if(mode == 1)
     n = noise(texture_coords * 32.0 + 240.0);
   else if(mode == 2)
     n = snoise(texture_coords * 16.0);
   else if(mode == 3)
-    n = noise(vec3(4.0 * texture_coords * (2.0 + sin(0.5 * time)), 0.0));
+    n = noise(vec3(4.0 * texture_coords * (2.0 + sin(0.5 * time)), z));
   else if(mode == 4)
-    n = snoise(vec3(2.0 * texture_coords * (2.0 + sin(0.5 * time)), 0.0));
+    n = snoise(vec3(2.0 * texture_coords * (2.0 + sin(0.5 * time)), z));
   else if(mode == 5)
-    n = noise(vec4(8.0 * texture_coords, 0.0, 0.5 * time));
+    n = noise(vec4(8.0 * texture_coords, z, 0.5 * time));
   else if(mode == 6)
-    n = snoise(vec4(4.0 * texture_coords.xy, 0.0, 0.5 * time));
+    n = snoise(vec4(4.0 * texture_coords.xy, z, 0.5 * time));
   else
     n = 0;
 
