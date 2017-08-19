@@ -523,10 +523,6 @@ vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords 
   /* These lines test, in order, 2D classic noise, 2D simplex noise,
    * 3D classic noise, 3D simplex noise, 4D classic noise, and finally
    * 4D simplex noise.
-   * Everything but the 4D simpex noise will make some uniform
-   * variables remain unused and be optimized away by the compiler,
-   * so OpenGL will fail to bind them. It's safe to ignore these
-   * warnings from the C program. The program is designed to work anyway.
    */
 
   // Offset the texture coordinate by current offset
