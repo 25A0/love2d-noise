@@ -123,6 +123,7 @@ local frames_this_second = 0
 
 -- offsets
 local x, y, z = 0.0, 0.0, 0.0
+local freq = 1.0
 
 local current_mode -- noise mode
 local modes = {
@@ -151,7 +152,8 @@ function love.draw()
   local info_string = string.format("FPS: %d\t%s", fps,
                                     modes[current_mode] or "Press 1-6 to switch modes")
   love.graphics.print(info_string, 10, 10)
-  local position_string = string.format("x: %f\ty: %f\tz: %f", x, y, z)
+  local position_string = string.format("x: %f\ty: %f\tz: %f\tfreq: %f",
+                                        x, y, z, freq)
   love.graphics.print(position_string, 10, h - 20)
 end
 
@@ -179,6 +181,10 @@ function love.update(dt)
   if love.keyboard.isDown("r") then z = z + dt * speed end
   if love.keyboard.isDown("f") then z = z - dt * speed end
   shader:send("z", z)
+
+  if love.keyboard.isDown("c") then freq = freq * ((1 + dt) * speed) end
+  if love.keyboard.isDown("x") then freq = freq / ((1 + dt) * speed) end
+  shader:send("freq", freq)
 end
 
 function love.keypressed(key)
