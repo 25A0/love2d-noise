@@ -165,19 +165,20 @@ end
 
 function love.draw()
   local w, h = love.window.getMode()
-  local min = math.min(w, h)
+  local draw_h = h - 40
+  local min = math.min(w, draw_h)
   local pos_x = (w - min) / 2
-  local pos_y = (h - min) / 2
+  local pos_y = (draw_h - min) / 2 + 20
   love.graphics.setShader(shader)
   love.graphics.draw(dummy_texture, pos_x, pos_y, 0, min, min)
   love.graphics.setShader()
   love.graphics.setColor(255, 255, 255, 255)
   local info_string = string.format("FPS: %d\t%s", fps,
                                     modes[current_mode] or "Press 1-6 to switch modes")
-  love.graphics.print(info_string, 10, 10)
+  love.graphics.print(info_string, 10, 2)
   local position_string = string.format("x: %f\ty: %f\tz: %f\tfreq: %f\tseed: %s",
                                         x, y, z, freq, seed)
-  love.graphics.print(position_string, 10, h - 20)
+  love.graphics.print(position_string, 10, h - 18)
 end
 
 function love.update(dt)
