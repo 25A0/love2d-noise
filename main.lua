@@ -91,7 +91,7 @@ local function build_shader(path_to_shader)
   local simplex_image = love.graphics.newImage(simplex_image_data)
   simplex_image:setFilter("nearest", "nearest")
   -- send texture to the shader
-  pcall(function() shader:send("simplexTexture", simplex_image) end)
+  shader:send("simplexTexture", simplex_image)
 
   -- construct 4d gradient texture
   local gradient_image_data = love.image.newImageData(256, 256)
@@ -111,7 +111,7 @@ local function build_shader(path_to_shader)
   local gradient_image = love.graphics.newImage(gradient_image_data)
   gradient_image:setFilter("nearest", "nearest")
   -- send texture to the shader
-  pcall(function() shader:send("gradTexture", gradient_image) end)
+  shader:send("gradTexture", gradient_image)
 
   return shader
 end
@@ -149,4 +149,11 @@ function love.update(dt)
 
   time = time + dt
   shader:send("time", time)
+end
+
+function love.keypressed(key)
+  local mode = tonumber(key)
+  if mode then
+    shader:send("mode", mode)
+  end
 end
