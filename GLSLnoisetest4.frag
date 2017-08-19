@@ -51,11 +51,11 @@
 uniform sampler2D permTexture;
 uniform sampler2D simplexTexture;
 uniform sampler2D gradTexture;
-uniform float time; // Used for texture animation
+
 uniform int mode; // Determines which of the noise functions is used
 
 // offsets
-uniform float x, y, z;
+uniform float x, y, z, w;
 uniform float freq = 1.0;
 
 /*
@@ -538,9 +538,9 @@ vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords 
   else if(mode == 4)
     n = snoise(freq * vec3(2.0 * texture_coords * 2.0, z/freq));
   else if(mode == 5)
-    n = noise(vec4(freq * vec3(8.0 * texture_coords, z/freq), 0.5 * time));
+    n = noise(freq * vec4(8.0 * texture_coords, z/freq, w/freq));
   else if(mode == 6)
-    n = snoise(vec4(freq * vec3(4.0 * texture_coords.xy, z/freq), 0.5 * time));
+    n = snoise(freq * vec4(4.0 * texture_coords.xy, z/freq, w/freq));
   else
     n = 0;
 

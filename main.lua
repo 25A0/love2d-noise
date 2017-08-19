@@ -57,7 +57,7 @@ function love.update(dt)
   end
 
   time = time + dt
-  shader:send("time", time)
+  shader:send("w", time)
 
   local speed = 1
   if love.keyboard.isDown("a") then x = x - dt * speed end
