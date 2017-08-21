@@ -525,22 +525,19 @@ vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords 
    * 4D simplex noise.
    */
 
-  // Offset the texture coordinate by current offset
-  texture_coords += vec2(x/freq, y/freq);
-
   float n;
   if(mode == 1)
-    n = noise(freq * texture_coords * 32.0 + 240.0);
+    n = noise(vec2(x, y) + freq * texture_coords);
   else if(mode == 2)
-    n = snoise(freq * texture_coords * 16.0);
+    n = snoise(vec2(x, y) + freq * texture_coords);
   else if(mode == 3)
-    n = noise(freq * vec3(4.0 * texture_coords * 2.0, z/freq));
+    n = noise(vec3(x, y, z) + freq * vec3(texture_coords, 0));
   else if(mode == 4)
-    n = snoise(freq * vec3(2.0 * texture_coords * 2.0, z/freq));
+    n = snoise(vec3(x, y, z) + freq * vec3(texture_coords, 0));
   else if(mode == 5)
-    n = noise(freq * vec4(8.0 * texture_coords, z/freq, w/freq));
+    n = noise(vec4(x, y, z, w) + freq * vec4(texture_coords, 0, 0));
   else if(mode == 6)
-    n = snoise(freq * vec4(4.0 * texture_coords.xy, z/freq, w/freq));
+    n = snoise(vec4(x, y, z, w) + freq * vec4(texture_coords.xy, 0, 0));
   else
     n = 0;
 
