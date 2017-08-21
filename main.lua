@@ -14,7 +14,7 @@ local x, y, z = 0.0, 0.0, 0.0
 local freq = 1.0
 local seed = 124
 
-local current_mode -- noise mode
+local current_mode = 1 -- noise mode
 local modes = {
   [1] = "2D classic noise",
   [2] = "2D simplex noise",

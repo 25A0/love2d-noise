@@ -52,10 +52,10 @@ uniform sampler2D permTexture;
 uniform sampler2D simplexTexture;
 uniform sampler2D gradTexture;
 
-uniform int mode; // Determines which of the noise functions is used
+uniform int mode = 1; // Determines which of the noise functions is used
 
 // offsets
-uniform float x, y, z, w;
+uniform float x = 0.0, y = 0.0, z = 0.0, w = 0.0;
 uniform float freq = 1.0;
 
 /*
@@ -516,15 +516,12 @@ float snoise(vec4 P) {
   return 27.0 * (n0 + n1 + n2 + n3 + n4);
 }
 
-
 vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords )
 {
 
-  /* These lines test, in order, 2D classic noise, 2D simplex noise,
-   * 3D classic noise, 3D simplex noise, 4D classic noise, and finally
-   * 4D simplex noise.
-   */
-
+  // Sample noise at (x, y, z, w) + freq * texture_coords.
+  // The value of mode determines which noise is sampled.
+  // The resulting value is in range [-1, 1].
   float n;
   if(mode == 1)
     n = noise(vec2(x, y) + freq * texture_coords);
