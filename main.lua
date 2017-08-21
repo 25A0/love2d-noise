@@ -9,6 +9,17 @@ local fps = 0
 local second_acc = 0
 local frames_this_second = 0
 
+local do_show_help = false
+local help_text = [[HELP
+
+Press 1-6 to switch modes
+Press A and D to change the x offset
+Press W and S to change the y offset
+Press R and F to change the z offset
+Press C and X to change the frequency
+
+]]
+
 -- offsets
 local x, y, z = 0.0, 0.0, 0.0
 local freq = 1.0
@@ -40,12 +51,20 @@ function love.draw()
   love.graphics.draw(dummy_texture, pos_x, pos_y, 0, min, min)
   love.graphics.setShader()
   love.graphics.setColor(255, 255, 255, 255)
-  local info_string = string.format("FPS: %d\t%s", fps,
-                                    modes[current_mode] or "Press 1-6 to switch modes")
+  local info_string = string.format("FPS: %d\t%s", fps, modes[current_mode])
   love.graphics.print(info_string, 10, 2)
   local position_string = string.format("x: %f\ty: %f\tz: %f\tfreq: %f\tseed: %s\tsamples/frame: %d",
                                         x, y, z, freq, seed, min*min)
   love.graphics.print(position_string, 10, h - 18)
+  love.graphics.printf("Press H for help", 10, h - 18, w - 20, "right")
+
+  if do_show_help then
+    local border = 50
+    love.graphics.setColor(0, 0, 0, 128)
+    love.graphics.rectangle("fill", border, border, w - 2 * border, h - 2 * border)
+    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.printf(help_text, border + 2, border + 2, w - 2 * (border + 2))
+  end
 end
 
 function love.update(dt)
@@ -76,6 +95,8 @@ function love.update(dt)
   if love.keyboard.isDown("c") then freq = freq * ((1 + dt * speed)) end
   if love.keyboard.isDown("x") then freq = freq / ((1 + dt * speed)) end
   shader:send("freq", freq)
+
+  do_show_help = love.keyboard.isDown("h")
 end
 
 function love.keypressed(key)
