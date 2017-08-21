@@ -43,14 +43,35 @@ end
 
 function love.draw()
   local w, h = love.window.getMode()
-  local draw_h = h - 40
-  local min = math.min(w, draw_h)
-  local pos_x = (w - min) / 2
-  local pos_y = (draw_h - min) / 2 + 20
+  local draw_w = w - 20
+  local draw_h = h - 60
+  local min = math.min(draw_w, draw_h)
+  local pos_x = (draw_w - min) / 2 + 20
+  local pos_y = (draw_h - min) / 2 + 40
+  love.graphics.setColor(255, 255, 255, 255)
+  -- Draw coordinates
+  -- x1
+  love.graphics.line(pos_x, pos_y + min, pos_x, pos_y - 18)
+  love.graphics.printf(string.format("x1 = %f", x),
+                       pos_x + 4, pos_y - 18, min - 8, "left", 0)
+  -- x2
+  love.graphics.line(pos_x + min, pos_y + min, pos_x + min, pos_y - 18)
+  love.graphics.printf(string.format("x2 = %f", x + freq),
+                       pos_x + 4, pos_y - 18, min - 8, "right", 0)
+
+  -- y1
+  love.graphics.line(pos_x + min, pos_y, pos_x - 18, pos_y)
+  love.graphics.printf(string.format("y1 = %f", y),
+                       pos_x - 2, pos_y + 4, min - 8, "left", math.rad(90))
+  -- y2
+  love.graphics.line(pos_x + min, pos_y + min, pos_x - 18, pos_y + min)
+  love.graphics.printf(string.format("y2 = %f", y + freq),
+                       pos_x - 2, pos_y + 4, min - 8, "right", math.rad(90))
+
+  -- Draw noise
   love.graphics.setShader(shader)
   love.graphics.draw(dummy_texture, pos_x, pos_y, 0, min, min)
   love.graphics.setShader()
-  love.graphics.setColor(255, 255, 255, 255)
   local info_string = string.format("FPS: %d\t%s", fps, modes[current_mode])
   love.graphics.print(info_string, 10, 2)
   local position_string = string.format("x: %f\ty: %f\tz: %f\tfreq: %f\tseed: %s\tsamples/frame: %d",
