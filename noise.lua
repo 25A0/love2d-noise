@@ -2,6 +2,20 @@ local unpack = unpack or table.unpack
 
 local noise = {}
 
+-- the different noise types
+noise.types = {
+  perlin2d  = 1,
+  simplex2d = 2,
+  perlin3d  = 3,
+  simplex3d = 4,
+  perlin4d  = 5,
+  simplex4d = 6,
+}
+
+function noise.init()
+  noise.dummy_texture = love.graphics.newCanvas(1, 1)
+end
+
 -- Builds the noise shader.
 -- Adapted from Stefan Gustavson's GLSLnoise4.c
 function noise.build_shader(path_to_shader, seed)
@@ -135,6 +149,34 @@ function noise.build_shader(path_to_shader, seed)
   shader:send("gradTexture", gradient_image)
 
   return shader
+end
+
+-- Samples the given noise type and renders the noise values to the current canvas.
+-- shader is the noise shader that will be used to sample the noise.
+-- noise_type defines which noise is sampled. You can pass any of the values
+-- defined in noise.types.
+-- samples_x and samples_y determines how many samples are drawn along the x and
+-- y axis within the sampling area.
+-- x, y, width, height define the sampling area from which samples are drawn along the
+-- x and y axis.
+-- z and w define at which z and w coordinate the samples are drawn.
+function noise.sample(shader, noise_type, samples_x, samples_y, x, y, width, height, z, w)
+  assert(noise.dummy_texture, "did you forget to call noise.init()?")
+  assert(shader, "shader must be defined")
+  assert(noise_type and 1 <= noise_type and noise_type <= 6, "noise_type is missing or invalid")
+
+  -- Send configuration to shader
+  shader:send("mode", noise_type)
+  shader:send("freq_x", width or 1.0)
+  shader:send("freq_y", height or 1.0)
+  shader:send("x", x or 0.0)
+  shader:send("y", y or 0.0)
+  shader:send("z", z or 0.0)
+  shader:send("w", w or 0.0)
+
+  love.graphics.setShader(shader)
+  love.graphics.draw(noise.dummy_texture, 0, 0, 0, samples_x or 1, samples_y or 1)
+  love.graphics.setShader()
 end
 
 return noise

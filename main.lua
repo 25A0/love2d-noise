@@ -39,6 +39,7 @@ local modes = {
 function love.load()
   love.window.setMode(800, 600, {vsync = false, resizable = true})
   dummy_texture = love.graphics.newCanvas(1, 1)
+  noise.init()
   shader = noise.build_shader("noise.frag", seed)
 end
 
@@ -71,8 +72,12 @@ function love.draw()
 
   -- Draw noise
   love.graphics.setShader(shader)
-  love.graphics.draw(dummy_texture, pos_x, pos_y, 0, min, min)
+  love.graphics.push()
+    love.graphics.translate(pos_x, pos_y)
+    noise.sample(shader, current_mode, min, min, x, y, freq_x, freq_y, z, time)
+  love.graphics.pop()
   love.graphics.setShader()
+
   local info_string = string.format("FPS: %d\t%s", fps, modes[current_mode])
   love.graphics.print(info_string, 10, 2)
   local position_string = string.format("x: %f\ty: %f\tz: %f\tfreq_x: %f\tfreq_y: %f\tseed: %s\tsamples/frame: %d",
