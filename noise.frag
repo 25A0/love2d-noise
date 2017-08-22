@@ -52,7 +52,7 @@ uniform sampler2D permTexture;
 uniform sampler2D simplexTexture;
 uniform sampler2D gradTexture;
 
-uniform int mode = 1; // Determines which of the noise functions is used
+uniform int type = 1; // Determines which of the noise functions is used
 
 // offsets
 uniform float x = 0.0, y = 0.0, z = 0.0, w = 0.0;
@@ -520,20 +520,20 @@ vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords 
 {
 
   // Sample noise at (x, y, z, w) + freq * texture_coords.
-  // The value of mode determines which noise is sampled.
+  // The value of type determines which noise is sampled.
   // The resulting value is in range [-1, 1].
   float n;
-  if(mode == 1)
+  if(type == 1)
     n = noise(vec2(x + freq_x * texture_coords.x, y + freq_y * texture_coords.y));
-  else if(mode == 2)
+  else if(type == 2)
     n = snoise(vec2(x + freq_x * texture_coords.x, y + freq_y * texture_coords.y));
-  else if(mode == 3)
+  else if(type == 3)
     n = noise(vec3(x + freq_x * texture_coords.x, y + freq_y * texture_coords.y, z));
-  else if(mode == 4)
+  else if(type == 4)
     n = snoise(vec3(x + freq_x * texture_coords.x, y + freq_y * texture_coords.y, z));
-  else if(mode == 5)
+  else if(type == 5)
     n = noise(vec4(x + freq_x * texture_coords.x, y + freq_y * texture_coords.y, z, w));
-  else if(mode == 6)
+  else if(type == 6)
     n = snoise(vec4(x + freq_x * texture_coords.x, y + freq_y * texture_coords.y, z, w));
   else
     n = 0;

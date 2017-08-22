@@ -166,7 +166,7 @@ function noise.sample(shader, noise_type, samples_x, samples_y, x, y, width, hei
   assert(noise_type and 1 <= noise_type and noise_type <= 6, "noise_type is missing or invalid")
 
   -- Send configuration to shader
-  shader:send("mode", noise_type)
+  shader:send("type", noise_type)
   shader:send("freq_x", width or 1.0)
   shader:send("freq_y", height or 1.0)
   shader:send("x", x or 0.0)

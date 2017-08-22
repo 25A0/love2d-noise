@@ -17,17 +17,17 @@ LOVE's random number generator internally.
 
 The shader exposes a few variables (`x`, `y`, `z`, `w`, `freq_x`, `freq_y`)
 that can be used to offset the sample coordinates and change the frequency.
-Additionally, the shader variable `mode` determines which noise is used. `mode`
+Additionally, the shader variable `type` determines which noise is used. `type`
 can be set to any of the integers 1 through 6.
 
 The shader includes:
 
- - 2D Perlin noise (mode 1)
- - 2D Simplex noise (mode 2)
- - 3D Perlin noise (mode 3)
- - 3D Simplex noise (mode 4)
- - 4D Perlin noise (mode 5)
- - 4D Simplex noise (mode 6)
+ - 2D Perlin noise (type 1)
+ - 2D Simplex noise (type 2)
+ - 3D Perlin noise (type 3)
+ - 3D Simplex noise (type 4)
+ - 4D Perlin noise (type 5)
+ - 4D Simplex noise (type 6)
 
 The repository includes a small demo to experiment with the different noise
 functions, move the sample coordinates, and change the frequency.
@@ -73,7 +73,9 @@ The `noise` module exposes the following variables and functions:
 
 **`noise.init()`** is a function that needs to be called once, before you call `noise.sample` for the first time.
 
-**`noise.types`** is a key-value table where each key is a human-readable name of a noise type available in this shader, and the value is the corresponding integer that can be used to define which noise type should be used. Specifically, it contains:
+**`noise.types`** is a key-value table where each key is a human-readable name of a noise type available in this shader, and the value is the corresponding integer that can be used in `noise.sample` and `shader:send("type", type)` to define which noise type should be used.
+
+Specifically, it contains:
 
 ```lua
 noise.types = {

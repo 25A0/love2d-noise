@@ -12,7 +12,7 @@ local frames_this_second = 0
 local do_show_help = false
 local help_text = [[HELP
 
-Press 1-6 to switch modes
+Press 1-6 to select the type of noise
 Press A and D to change the x offset
 Press W and S to change the y offset
 Press R and F to change the z offset
@@ -26,8 +26,8 @@ local x, y, z = 0.0, 0.0, 0.0
 local freq_x, freq_y = 1.0, 1.0
 local seed = 124
 
-local current_mode = 1 -- noise mode
-local modes = {
+local current_type = 1 -- noise type
+local types = {
   [1] = "2D classic noise",
   [2] = "2D simplex noise",
   [3] = "3D classic noise",
@@ -74,11 +74,11 @@ function love.draw()
   love.graphics.setShader(shader)
   love.graphics.push()
     love.graphics.translate(pos_x, pos_y)
-    noise.sample(shader, current_mode, min, min, x, y, freq_x, freq_y, z, time)
+    noise.sample(shader, current_type, min, min, x, y, freq_x, freq_y, z, time)
   love.graphics.pop()
   love.graphics.setShader()
 
-  local info_string = string.format("FPS: %d\t%s", fps, modes[current_mode])
+  local info_string = string.format("FPS: %d\t%s", fps, types[current_type])
   love.graphics.print(info_string, 10, 2)
   local position_string = string.format("x: %f\ty: %f\tz: %f\tfreq_x: %f\tfreq_y: %f\tseed: %s\tsamples/frame: %d",
                                         x, y, z, freq_x, freq_y, seed, min*min)
@@ -131,9 +131,9 @@ function love.update(dt)
 end
 
 function love.keypressed(key)
-  local mode = tonumber(key)
-  if mode and modes[mode] then
-    current_mode = mode
-    shader:send("mode", mode)
+  local type = tonumber(key)
+  if type and types[type] then
+    current_type = type
+    shader:send("type", type)
   end
 end
