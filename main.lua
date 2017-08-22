@@ -71,12 +71,10 @@ function love.draw()
                        pos_x - 2, pos_y + 4, min - 8, "right", math.rad(90))
 
   -- Draw noise
-  love.graphics.setShader(shader)
   love.graphics.push()
     love.graphics.translate(pos_x, pos_y)
     noise.sample(shader, current_type, min, min, x, y, freq_x, freq_y, z, time)
   love.graphics.pop()
-  love.graphics.setShader()
 
   local info_string = string.format("FPS: %d\t%s", fps, types[current_type])
   love.graphics.print(info_string, 10, 2)
