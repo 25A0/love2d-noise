@@ -56,7 +56,7 @@ uniform int mode = 1; // Determines which of the noise functions is used
 
 // offsets
 uniform float x = 0.0, y = 0.0, z = 0.0, w = 0.0;
-uniform float freq = 1.0;
+uniform float freq_x = 1.0, freq_y = 1.0;
 
 /*
  * To create offsets of one texel and one half texel in the
@@ -524,17 +524,17 @@ vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords 
   // The resulting value is in range [-1, 1].
   float n;
   if(mode == 1)
-    n = noise(vec2(x, y) + freq * texture_coords);
+    n = noise(vec2(x + freq_x * texture_coords.x, y + freq_y * texture_coords.y));
   else if(mode == 2)
-    n = snoise(vec2(x, y) + freq * texture_coords);
+    n = snoise(vec2(x + freq_x * texture_coords.x, y + freq_y * texture_coords.y));
   else if(mode == 3)
-    n = noise(vec3(x, y, z) + freq * vec3(texture_coords, 0));
+    n = noise(vec3(x + freq_x * texture_coords.x, y + freq_y * texture_coords.y, z));
   else if(mode == 4)
-    n = snoise(vec3(x, y, z) + freq * vec3(texture_coords, 0));
+    n = snoise(vec3(x + freq_x * texture_coords.x, y + freq_y * texture_coords.y, z));
   else if(mode == 5)
-    n = noise(vec4(x, y, z, w) + freq * vec4(texture_coords, 0, 0));
+    n = noise(vec4(x + freq_x * texture_coords.x, y + freq_y * texture_coords.y, z, w));
   else if(mode == 6)
-    n = snoise(vec4(x, y, z, w) + freq * vec4(texture_coords.xy, 0, 0));
+    n = snoise(vec4(x + freq_x * texture_coords.x, y + freq_y * texture_coords.y, z, w));
   else
     n = 0;
 

@@ -16,13 +16,14 @@ Press 1-6 to switch modes
 Press A and D to change the x offset
 Press W and S to change the y offset
 Press R and F to change the z offset
-Press C and X to change the frequency
+Press J and L to change the frequency along the x axis
+Press I and K to change the frequency along the y axis
 
 ]]
 
 -- offsets
 local x, y, z = 0.0, 0.0, 0.0
-local freq = 1.0
+local freq_x, freq_y = 1.0, 1.0
 local seed = 124
 
 local current_mode = 1 -- noise mode
@@ -56,7 +57,7 @@ function love.draw()
                        pos_x + 4, pos_y - 18, min - 8, "left", 0)
   -- x2
   love.graphics.line(pos_x + min, pos_y + min, pos_x + min, pos_y - 18)
-  love.graphics.printf(string.format("x2 = %f", x + freq),
+  love.graphics.printf(string.format("x2 = %f", x + freq_x),
                        pos_x + 4, pos_y - 18, min - 8, "right", 0)
 
   -- y1
@@ -65,7 +66,7 @@ function love.draw()
                        pos_x - 2, pos_y + 4, min - 8, "left", math.rad(90))
   -- y2
   love.graphics.line(pos_x + min, pos_y + min, pos_x - 18, pos_y + min)
-  love.graphics.printf(string.format("y2 = %f", y + freq),
+  love.graphics.printf(string.format("y2 = %f", y + freq_y),
                        pos_x - 2, pos_y + 4, min - 8, "right", math.rad(90))
 
   -- Draw noise
@@ -74,8 +75,8 @@ function love.draw()
   love.graphics.setShader()
   local info_string = string.format("FPS: %d\t%s", fps, modes[current_mode])
   love.graphics.print(info_string, 10, 2)
-  local position_string = string.format("x: %f\ty: %f\tz: %f\tfreq: %f\tseed: %s\tsamples/frame: %d",
-                                        x, y, z, freq, seed, min*min)
+  local position_string = string.format("x: %f\ty: %f\tz: %f\tfreq_x: %f\tfreq_y: %f\tseed: %s\tsamples/frame: %d",
+                                        x, y, z, freq_x, freq_y, seed, min*min)
   love.graphics.print(position_string, 10, h - 18)
   love.graphics.printf("Press H for help", 10, h - 18, w - 20, "right")
 
@@ -113,9 +114,13 @@ function love.update(dt)
   if love.keyboard.isDown("f") then z = z - dt * speed end
   shader:send("z", z)
 
-  if love.keyboard.isDown("c") then freq = freq * ((1 + dt * speed)) end
-  if love.keyboard.isDown("x") then freq = freq / ((1 + dt * speed)) end
-  shader:send("freq", freq)
+  if love.keyboard.isDown("l") then freq_x = freq_x * ((1 + dt * speed)) end
+  if love.keyboard.isDown("j") then freq_x = freq_x / ((1 + dt * speed)) end
+  shader:send("freq_x", freq_x)
+
+  if love.keyboard.isDown("k") then freq_y = freq_y * ((1 + dt * speed)) end
+  if love.keyboard.isDown("i") then freq_y = freq_y / ((1 + dt * speed)) end
+  shader:send("freq_y", freq_y)
 
   do_show_help = love.keyboard.isDown("h")
 end
