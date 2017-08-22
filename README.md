@@ -65,7 +65,7 @@ The example above draws 2D noise directly to the screen. If, instead, you just w
  1. Create a canvas. The size of the canvas depends on the number of samples you need. If you want to sample noise for a 16x16 grid, then a 16x16 canvas is sufficient.
  2. Sample noise using `noise.sample`. Set `samples_x` and `samples_y` to the width and height of your canvas. The sampling area (defined by `x`, `y`, `width`, `height`, `z`, `w`) is up to you.
  3. Extract the image data of the canvas using [`Canvas:newImageData`](https://love2d.org/wiki/Canvas:newImageData)
- 4. Process the noise data by extracting individual pixels using [`ImageData:getPixel`](https://love2d.org/wiki/ImageData:getPixel), or applying a function to each pixel using [`ImageData:mapPixel`](https://love2d.org/wiki/ImageData:mapPixel).
+ 4. Process the noise data by extracting individual pixels using [`ImageData:getPixel`](https://love2d.org/wiki/ImageData:getPixel), or by applying a function to each pixel using [`ImageData:mapPixel`](https://love2d.org/wiki/ImageData:mapPixel).
 
 ### Documentation
 
@@ -93,10 +93,16 @@ noise.types = {
  - `path_to_shader` is a file path pointing towards `noise.frag`.
  - `seed` is an integer that will seed the noise functions. If no seed is given, a default seed will be used.
 
-**`noise.sample(shader, noise_type, samples_x, samples_y, x, y, width, height, z, w)`** samples noise of a certain type in a given area.
+**`noise.sample(shader, noise_type, samples_x, samples_y, x, y, width, height, z, w)`** samples noise of a certain type in a given area, and renders it to the currently active canvas.
 
  - `shader` is the compiled shader as returned by `noise.build_shader`.
  - `noise_type` is an integer that defines which type of noise will be sampled, and can be any one of the integer values in `noise.types`. In practice, you can simply do something like `noise.sample(shader, noise.types.simplex3d, ...`.
  - `samples_x` and `samples_y` are integers that define how many noise samples will be drawn along the x and y axis, respectively.
  - `x`, `y`, `width`, `height` are floats that define the area from which samples will be drawn along the x and y axis.
  - `z` and `w` are floats that define at which coordinates the noise will be sampled in the third and fourth dimension, respectively. If 2D noise is used, `z` and `w` is ignored. If 3D noise is used, `w` is ignored.
+
+The shader exposes the following variables:
+
+ - `type` is an integer that determines which type of noise is sampled. See `noise.types` for valid values.
+ - `x`, `y`, `z`, `w` are floats that determine at which coordinate the noise is sampled.
+ - `freq_x` and `freq_y` are floats that determine the area that will be sampled when rendering a texture with this shader.
