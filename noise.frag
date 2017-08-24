@@ -528,15 +528,18 @@ vec4 encode8bit(float n)
 // in the red and green component
 vec4 encode16bit(float n)
 {
-  return vec4(n, fract(n * 256), 0.0, 1.0);
+  float r = int(n * 256) / 256.0;
+  return vec4(r, fract(n * 256), 0.0, 1.0);
 }
 
 // Given a noise value in range [0, 1], encode it with 24 bit precision
 // in the red, green and blue component
 vec4 encode24bit(float n)
 {
-  float g = fract(n * 256);
-  return vec4(n, g, fract(g * 256), 1.0);
+  float r = int(n * 256) / 256.0;
+  float g = int(fract(n * 256) * 256) / 256.0;
+  float b = fract(n * 256 * 256);
+  return vec4(r, g, b, 1.0);
 }
 
 vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords )
