@@ -53,6 +53,7 @@ uniform sampler2D simplexTexture;
 uniform sampler2D gradTexture;
 
 uniform int type = 1; // Determines which of the noise functions is used
+uniform int encoding = 8; // How the noise is encoded in the color. Can be 8, 16, 24
 
 // offsets
 uniform float x = 0.0, y = 0.0, z = 0.0, w = 0.0;
@@ -516,6 +517,28 @@ float snoise(vec4 P) {
   return 27.0 * (n0 + n1 + n2 + n3 + n4);
 }
 
+// Given a noise value in range [0, 1], encode it with 8 bit precision as a
+// greyscale colour
+vec4 encode8bit(float n)
+{
+  return vec4(n, 0.0, 0.0, 1.0);
+}
+
+// Given a noise value in range [0, 1], encode it with 16 bit precision
+// in the red and green component
+vec4 encode16bit(float n)
+{
+  return vec4(n, fract(n * 256), 0.0, 1.0);
+}
+
+// Given a noise value in range [0, 1], encode it with 24 bit precision
+// in the red, green and blue component
+vec4 encode24bit(float n)
+{
+  float g = fract(n * 256);
+  return vec4(n, g, fract(g * 256), 1.0);
+}
+
 vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords )
 {
 
@@ -538,7 +561,20 @@ vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords 
   else
     n = 0;
 
-  return color * vec4(0.5 + 0.5 * vec3(n, n, n), 1.0);
+  // Bring noise into [0, 1]
+  n = 0.5 + 0.5 * n;
+
+  vec4 enc;
+  if(encoding == 8)
+    enc = encode8bit(n);
+  else if(encoding == 16)
+    enc = encode16bit(n);
+  else if(encoding == 24)
+    enc = encode24bit(n);
+  else
+    enc = vec4(.5, .5, .5, 1.0);
+
+  return color * enc;
 
 }
 

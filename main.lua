@@ -18,6 +18,7 @@ Press W and S to change the y offset
 Press R and F to change the z offset
 Press J and L to change the frequency along the x axis
 Press I and K to change the frequency along the y axis
+Press E to toggle encoding scheme
 
 ]]
 
@@ -25,6 +26,8 @@ Press I and K to change the frequency along the y axis
 local x, y, z = 0.0, 0.0, 0.0
 local freq_x, freq_y = 1.0, 1.0
 local seed = 124
+local encoding = noise.encoding[1]
+local lock_encoding_key = false
 
 local current_type = 1 -- noise type
 local types = {
@@ -76,7 +79,7 @@ function love.draw()
     noise.sample(shader, current_type, min, min, x, y, freq_x, freq_y, z, time)
   love.graphics.pop()
 
-  local info_string = string.format("FPS: %d\t%s", fps, types[current_type])
+  local info_string = string.format("FPS: %d\t%s\t%d bit encoding", fps, types[current_type], encoding)
   love.graphics.print(info_string, 10, 2)
   local position_string = string.format("x: %f\ty: %f\tz: %f\tfreq_x: %f\tfreq_y: %f\tseed: %s\tsamples/frame: %d",
                                         x, y, z, freq_x, freq_y, seed, min*min)
@@ -124,6 +127,16 @@ function love.update(dt)
   if love.keyboard.isDown("k") then freq_y = freq_y * ((1 + dt * speed)) end
   if love.keyboard.isDown("i") then freq_y = freq_y / ((1 + dt * speed)) end
   shader:send("freq_y", freq_y)
+
+  if love.keyboard.isDown("e") then
+    if not lock_encoding_key then
+      encoding = math.max((encoding + 8) % 32, 8)
+    end
+    lock_encoding_key = true
+  else
+    lock_encoding_key = false
+  end
+  shader:send("encoding", encoding)
 
   do_show_help = love.keyboard.isDown("h")
 end

@@ -12,6 +12,13 @@ noise.types = {
   simplex4d = 6,
 }
 
+-- the available encoding options.
+-- to change the current encoding, use `shader:send("encoding", encoding)`,
+-- where `encoding` is an element of this table.
+noise.encoding = {
+  8, 16, 24
+}
+
 function noise.init()
   noise.dummy_texture = love.graphics.newCanvas(1, 1)
 end
