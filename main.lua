@@ -49,10 +49,10 @@ end
 function love.draw()
   local w, h = love.window.getMode()
   local draw_w = w - 20
-  local draw_h = h - 60
+  local draw_h = h - 80
   local min = math.min(draw_w, draw_h)
   local pos_x = (draw_w - min) / 2 + 20
-  local pos_y = (draw_h - min) / 2 + 40
+  local pos_y = (draw_h - min) / 2 + 60
   love.graphics.setColor(255, 255, 255, 255)
   -- Draw coordinates
   -- x1
@@ -86,11 +86,16 @@ function love.draw()
     noise.sample(shader, current_type, 1, 1, mx, my, 0, 0, z, time)
   end)
   -- Obtain the data of that pixel
-  local r, g, b, a = sample_canvas:newImageData():getPixel(0, 0)
+  local r, g, b = sample_canvas:newImageData():getPixel(0, 0)
   local f = noise.decode(encoding, r, g, b)
 
-  local info_string = string.format("FPS: %d\t%s\t%d bit encoding\t(%d, %d, %d, %d)\t%f\t%f %f", fps, types[current_type], encoding, r, g, b, a, f, mx, my)
+  local info_string = string.format("FPS: %d\t%s\t%d bit encoding", fps, types[current_type], encoding)
   love.graphics.print(info_string, 10, 2)
+
+  local sample_string = string.format("mx: %f my: %f\tcol: (%f, %f, %f)\tval: %f",
+                                      mx, my, r/255, g/255, b/255, f)
+  love.graphics.print(sample_string, 10, 20)
+
   local position_string = string.format("x: %f\ty: %f\tz: %f\tfreq_x: %f\tfreq_y: %f\tseed: %s\tsamples/frame: %d",
                                         x, y, z, freq_x, freq_y, seed, min*min)
   love.graphics.print(position_string, 10, h - 18)
