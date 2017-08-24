@@ -1,7 +1,7 @@
 local noise = require("noise")
 
 local shader
-local dummy_texture
+local sample_canvas
 
 
 local time = 0
@@ -41,7 +41,7 @@ local types = {
 
 function love.load()
   love.window.setMode(800, 600, {vsync = false, resizable = true})
-  dummy_texture = love.graphics.newCanvas(1, 1)
+  sample_canvas = love.graphics.newCanvas(1, 1)
   noise.init()
   shader = noise.build_shader("noise.frag", seed)
 end
@@ -79,7 +79,18 @@ function love.draw()
     noise.sample(shader, current_type, min, min, x, y, freq_x, freq_y, z, time)
   love.graphics.pop()
 
-  local info_string = string.format("FPS: %d\t%s\t%d bit encoding", fps, types[current_type], encoding)
+  -- Render a single pixel at the mouse position to the sample canvas
+  local mx = x + ((love.mouse.getX() - pos_x) / min) * freq_x
+  local my = y + ((love.mouse.getY() - pos_y) / min) * freq_y
+  sample_canvas:renderTo(function()
+    noise.sample(shader, current_type, 1, 1, mx, my, 0, 0, z, time)
+  end)
+  -- Obtain the data of that pixel
+  local r, g, b, a = sample_canvas:newImageData():getPixel(0, 0)
+  local div = 1/255
+  local f = r * div + g * div * div + b * div * div * div
+
+  local info_string = string.format("FPS: %d\t%s\t%d bit encoding\t(%d, %d, %d, %d)\t%f\t%f %f", fps, types[current_type], encoding, r, g, b, a, f, mx, my)
   love.graphics.print(info_string, 10, 2)
   local position_string = string.format("x: %f\ty: %f\tz: %f\tfreq_x: %f\tfreq_y: %f\tseed: %s\tsamples/frame: %d",
                                         x, y, z, freq_x, freq_y, seed, min*min)
