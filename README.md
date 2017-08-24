@@ -101,8 +101,14 @@ noise.types = {
  - `x`, `y`, `width`, `height` are floats that define the area from which samples will be drawn along the x and y axis.
  - `z` and `w` are floats that define at which coordinates the noise will be sampled in the third and fourth dimension, respectively. If 2D noise is used, `z` and `w` is ignored. If 3D noise is used, `w` is ignored.
 
+**`noise.decode(encoding, r, g, b)`** decodes a noise value and returns it as a float in range [0, 1].
+
+ - `encoding` the used encoding scheme. See `noise.encoding` for valid values.
+ - `r`, `g`, `b` the RGB components in range [0, 255].
+
 The shader exposes the following variables:
 
  - `type` is an integer that determines which type of noise is sampled. See `noise.types` for valid values.
+ - `encoding` defines in which way the noise value will be encoded in the RGBA components of the canvas. See `noise.encoding` for valid values.
  - `x`, `y`, `z`, `w` are floats that determine at which coordinate the noise is sampled.
  - `freq_x` and `freq_y` are floats that determine the area that will be sampled when rendering a texture with this shader.
