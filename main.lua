@@ -87,7 +87,7 @@ function love.draw()
   end)
   -- Obtain the data of that pixel
   local r, g, b, a = sample_canvas:newImageData():getPixel(0, 0)
-  local f = noise.decode[encoding](r, g, b)
+  local f = noise.decode(encoding, r, g, b)
 
   local info_string = string.format("FPS: %d\t%s\t%d bit encoding\t(%d, %d, %d, %d)\t%f\t%f %f", fps, types[current_type], encoding, r, g, b, a, f, mx, my)
   love.graphics.print(info_string, 10, 2)

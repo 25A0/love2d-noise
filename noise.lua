@@ -20,11 +20,15 @@ noise.encoding = {
 }
 
 local div = 1/255
-noise.decode = {
+local decoding_functions = {
   [ 8] = function(r      ) return r * div                                 end,
   [16] = function(r, g   ) return r * div + g * div * div                 end,
   [24] = function(r, g, b) return r * div + g * div * div + b * div * div end,
 }
+
+function noise.decode(encoding, r, g, b)
+  return decoding_functions[encoding](r, g, b)
+end
 
 function noise.init()
   noise.dummy_texture = love.graphics.newCanvas(1, 1)
