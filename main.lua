@@ -10,6 +10,7 @@ local second_acc = 0
 local frames_this_second = 0
 
 local do_show_help = false
+local do_sample = false
 local help_text = [[HELP
 
 Press 1-6 to select the type of noise
@@ -19,6 +20,9 @@ Press R and F to change the z offset
 Press J and L to change the frequency along the x axis
 Press I and K to change the frequency along the y axis
 Press E to toggle encoding scheme
+
+Hold SHIFT to sample the noise under the mouse pointer
+Hold H to show this help screen. Well, you already knew that...
 
 ]]
 
@@ -79,21 +83,30 @@ function love.draw()
     noise.sample(shader, current_type, min, min, x, y, freq_x, freq_y, z, time)
   love.graphics.pop()
 
-  -- Render a single pixel at the mouse position to the sample canvas
-  local mx = x + ((love.mouse.getX() - pos_x) / min) * freq_x
-  local my = y + ((love.mouse.getY() - pos_y) / min) * freq_y
-  sample_canvas:renderTo(function()
-    noise.sample(shader, current_type, 1, 1, mx, my, 0, 0, z, time)
-  end)
-  -- Obtain the data of that pixel
-  local r, g, b = sample_canvas:newImageData():getPixel(0, 0)
-  local f = noise.decode(encoding, r, g, b)
+  local r, g, b, f, mx, my
+  if do_sample then
+    -- Render a single pixel at the mouse position to the sample canvas
+    mx = x + ((love.mouse.getX() - pos_x) / min) * freq_x
+    my = y + ((love.mouse.getY() - pos_y) / min) * freq_y
+    sample_canvas:renderTo(function()
+      noise.sample(shader, current_type, 1, 1, mx, my, 0, 0, z, time)
+    end)
+    -- Obtain the data of that pixel
+    r, g, b = sample_canvas:newImageData():getPixel(0, 0)
+    f = noise.decode(encoding, r, g, b)
+  end
 
   local info_string = string.format("FPS: %d\t%s\t%d bit encoding", fps, types[current_type], encoding)
   love.graphics.print(info_string, 10, 2)
 
-  local sample_string = string.format("mx: %f my: %f\tcol: (%f, %f, %f)\tval: %f",
-                                      mx, my, r/255, g/255, b/255, f)
+  local sample_string
+
+  if do_sample then
+    sample_string = string.format("mx: %f my: %f\tcol: (%f, %f, %f)\tval: %f",
+                                  mx, my, r/255, g/255, b/255, f)
+  else
+    sample_string = "Hold SHIFT to sample noise under mouse pointer"
+  end
   love.graphics.print(sample_string, 10, 20)
 
   local position_string = string.format("x: %f\ty: %f\tz: %f\tfreq_x: %f\tfreq_y: %f\tseed: %s\tsamples/frame: %d",
@@ -154,6 +167,7 @@ function love.update(dt)
   shader:send("encoding", encoding)
 
   do_show_help = love.keyboard.isDown("h")
+  do_sample = love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift")
 end
 
 function love.keypressed(key)
