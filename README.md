@@ -42,7 +42,8 @@ This repository contains the following files:
  - `demo-minimal` contains a minimal LOVE2D project to illustrate how to use the shader
  - `demo-mountains` contains a more complex LOVE2D project that shows how noise data can be used across shaders without transferring them back and forth between GPU memory and main memory. It produces this infinite foggy mountain range with cheap parallax scrolling:
 
-   [![](https://media.giphy.com/media/3ohhwGFpRk33lDiI3m/giphy.gif)](https://giphy.com/gifs/3ohhwGFpRk33lDiI3m/html5 )
+   ![mountain demo](http://i.imgur.com/Ulcz7Y9.png)
+   mountain demo in motion: https://giphy.com/gifs/3ohhwGFpRk33lDiI3m/html5
 
 Here is the minimal example (from `demo-minimal/main.lua`) to illustrate how to use the shader:
 
