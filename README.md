@@ -64,12 +64,14 @@ function love.draw()
 end
 ```
 
-The example above draws 2D noise directly to the screen. If, instead, you just want to sample noise in a continuous area, and use the noise values in a different way, you could do something like this:
+The example above draws 2D noise directly to the screen. If, instead, you just want to sample noise in a continuous area, and use the noise values in your game code, you could do something like this:
 
  1. Create a canvas. The size of the canvas depends on the number of samples you need. If you want to sample noise for a 16x16 grid, then a 16x16 canvas is sufficient.
  2. Sample noise using `noise.sample`. Set `samples_x` and `samples_y` to the width and height of your canvas. The sampling area (defined by `x`, `y`, `width`, `height`, `z`, `w`) is up to you.
  3. Extract the image data of the canvas using [`Canvas:newImageData`](https://love2d.org/wiki/Canvas:newImageData)
  4. Process the noise data by extracting individual pixels using [`ImageData:getPixel`](https://love2d.org/wiki/ImageData:getPixel), or by applying a function to each pixel using [`ImageData:mapPixel`](https://love2d.org/wiki/ImageData:mapPixel).
+
+See `demo-mountain` for a project that first draws noise value to a canvas, and then reads data from that canvas in a second shader when drawing to the screen. With this approach, noise data is never transferred between GPU memory and main memory.
 
 ### Documentation
 
