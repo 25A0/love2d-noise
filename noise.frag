@@ -521,7 +521,7 @@ float snoise(vec4 P) {
 // greyscale colour
 vec4 encode8bit(float n)
 {
-  return vec4(n, 0.0, 0.0, 1.0);
+  return vec4(n, n, n, 1.0);
 }
 
 // Given a noise value in range [0, 1], encode it with 16 bit precision
