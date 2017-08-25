@@ -38,10 +38,13 @@ This repository contains the following files:
 
  - `noise.frag` the fragment shader that samples the noise
  - `noise.lua` a lua module that handles the noise seeding, compiles the shader, and supplies the necessary data to the shader
+ - `demo-test` contains a small LOVE2D project that lets you try out the different noise types and experiment with the sampling space and frequency
  - `demo-minimal` contains a minimal LOVE2D project to illustrate how to use the shader
- - `main.lua` a small demo to try out the different noise variants
+ - `demo-mountains` contains a more complex LOVE2D project that shows how noise data can be used across shaders without transferring them back and forth between GPU memory and main memory. It produces this infinite foggy mountain range with cheap parallax scrolling:
 
-Here is a minimal example to illustrate how to use the shader:
+   [![](https://media.giphy.com/media/3ohhwGFpRk33lDiI3m/giphy.gif)](https://giphy.com/gifs/3ohhwGFpRk33lDiI3m/html5 )
+
+Here is the minimal example (from `demo-minimal/main.lua`) to illustrate how to use the shader:
 
 ```lua
 local noise = require("noise")
