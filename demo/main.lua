@@ -11,7 +11,7 @@ function love.load()
   -- compile the shader. The second argument is the seed. If no seed is given,
   -- a default permutation table is used
   noise_shader = noise.build_shader("noise.frag", 43)
-  noise_shader:send("encoding", 8)
+  noise_shader:send("encoding", 24)
   range_shader = love.graphics.newShader("range.frag")
   noise_texture = love.graphics.newCanvas(800, ranges)
   noise_texture:setFilter("nearest", "nearest")
@@ -27,11 +27,11 @@ function love.draw()
   -- Render noise to the noise texture
   love.graphics.push()
   love.graphics.setCanvas(noise_texture)
-  love.graphics.clear(128, 128, 128, 255)
+  love.graphics.clear(64, 64, 64, 255)
   love.graphics.setShader(noise_shader)
   local octaves = 3
-  local frequency_mults = {1, 5, 5}
-  local alpha_dampening = {.5, .2, .02}
+  local frequency_mults = {1, 5, 2}
+  local alpha_dampening = {.5, .1, .01}
   for i=1,ranges do
     -- Sample noise at different frequencies
     for octave=1,octaves do
