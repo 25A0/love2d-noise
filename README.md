@@ -38,6 +38,7 @@ This repository contains the following files:
 
  - `noise.frag` the fragment shader that samples the noise
  - `noise.lua` a lua module that handles the noise seeding, compiles the shader, and supplies the necessary data to the shader
+ - `demo-minimal` contains a minimal LOVE2D project to illustrate how to use the shader
  - `main.lua` a small demo to try out the different noise variants
 
 Here is a minimal example to illustrate how to use the shader:
