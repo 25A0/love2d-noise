@@ -95,6 +95,8 @@ noise.types = {
 }
 ```
 
+**`noise.encoding`** is a table that contains the valid encoding modes. Any element of this table can be passed to `noise.decode(encoding, ...)` and `shader:send("encoding", encoding)` to define how the noise value is encoded in the RGB components of the canvas.
+
 **`noise.build_shader(path_to_shader, seed)`** is a function that compiles the shader, and returns the compiled shader.
 
  - `path_to_shader` is a file path pointing towards `noise.frag`.
